@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Claude Assist — Your Claude usage, right in the Mac menu bar</title>
+  <meta name="description" content="Claude Assist is a free macOS menu bar app that shows your Claude session and weekly usage limits, reset countdowns, and a live usage graph — at a glance." />
+  <meta name="theme-color" content="#F4F3EE" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#1F1E1D" media="(prefers-color-scheme: dark)" />
+  <meta property="og:title" content="Claude Assist for macOS" />
+  <meta property="og:description" content="Your Claude usage limits, one glance away. Free menu bar app for Mac." />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-12 -12 24 24'%3E%3Cg fill='%23D97757'%3E%3Crect x='-1.3' y='-11' width='2.6' height='9' rx='1.3'/%3E%3Crect x='-1.3' y='-11' width='2.6' height='9' rx='1.3' transform='rotate(45)'/%3E%3Crect x='-1.3' y='-11' width='2.6' height='9' rx='1.3' transform='rotate(90)'/%3E%3Crect x='-1.3' y='-11' width='2.6' height='9' rx='1.3' transform='rotate(135)'/%3E%3Crect x='-1.3' y='-11' width='2.6' height='9' rx='1.3' transform='rotate(180)'/%3E%3Crect x='-1.3' y='-11' width='2.6' height='9' rx='1.3' transform='rotate(225)'/%3E%3Crect x='-1.3' y='-11' width='2.6' height='9' rx='1.3' transform='rotate(270)'/%3E%3Crect x='-1.3' y='-11' width='2.6' height='9' rx='1.3' transform='rotate(315)'/%3E%3C/g%3E%3C/svg%3E" />
+
+  <!-- Apply saved / system theme before first paint to avoid a flash -->
+  <script>
+    (function () {
+      var t = localStorage.getItem("theme");
+      if (!t) t = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      document.documentElement.dataset.theme = t;
+    })();
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- Reusable SVG symbols -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <symbol id="spark" viewBox="-12 -12 24 24">
+        <g fill="currentColor">
+          <rect x="-1.25" y="-11.5" width="2.5" height="9.5" rx="1.25" />
+          <rect x="-1.25" y="-10.5" width="2.5" height="8.5" rx="1.25" transform="rotate(30)" />
+          <rect x="-1.25" y="-11.5" width="2.5" height="9.5" rx="1.25" transform="rotate(60)" />
+          <rect x="-1.25" y="-10" width="2.5" height="8" rx="1.25" transform="rotate(90)" />
+          <rect x="-1.25" y="-11.5" width="2.5" height="9.5" rx="1.25" transform="rotate(120)" />
+          <rect x="-1.25" y="-10.5" width="2.5" height="8.5" rx="1.25" transform="rotate(150)" />
+          <rect x="-1.25" y="-11.5" width="2.5" height="9.5" rx="1.25" transform="rotate(180)" />
+          <rect x="-1.25" y="-10" width="2.5" height="8" rx="1.25" transform="rotate(210)" />
+          <rect x="-1.25" y="-11.5" width="2.5" height="9.5" rx="1.25" transform="rotate(240)" />
+          <rect x="-1.25" y="-10.5" width="2.5" height="8.5" rx="1.25" transform="rotate(270)" />
+          <rect x="-1.25" y="-11.5" width="2.5" height="9.5" rx="1.25" transform="rotate(300)" />
+          <rect x="-1.25" y="-10" width="2.5" height="8" rx="1.25" transform="rotate(330)" />
+        </g>
+      </symbol>
+      <symbol id="apple" viewBox="0 0 24 24">
+        <path fill="currentColor" d="M16.37 12.6c-.02-2.3 1.88-3.4 1.96-3.46-1.07-1.56-2.73-1.78-3.32-1.8-1.41-.14-2.76.83-3.47.83-.72 0-1.82-.81-2.99-.79-1.54.02-2.96.9-3.75 2.27-1.6 2.78-.41 6.89 1.15 9.14.76 1.1 1.67 2.34 2.86 2.3 1.15-.05 1.58-.74 2.97-.74 1.38 0 1.77.74 2.98.72 1.23-.02 2.01-1.12 2.76-2.23.87-1.28 1.23-2.52 1.25-2.58-.03-.01-2.39-.92-2.4-3.66zM14.1 5.86c.63-.77 1.06-1.83.94-2.89-.91.04-2.02.61-2.67 1.37-.58.67-1.1 1.76-.96 2.8 1.02.08 2.06-.52 2.69-1.28z"/>
+      </symbol>
+      <symbol id="check" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="11" fill="currentColor" />
+        <path d="M7 12.5l3.2 3.2L17 9" fill="none" stroke="#1d1d1d" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" />
+      </symbol>
+      <symbol id="info" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="9.5" fill="none" stroke="currentColor" stroke-width="1.6" />
+        <path d="M12 11v6M12 7.5v.01" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+      </symbol>
+    </defs>
+  </svg>
+
+  <!-- ============ NAV ============ -->
+  <header class="nav" id="nav">
+    <div class="container nav__inner">
+      <a href="#top" class="brand" aria-label="Claude Assist home">
+        <svg class="brand__mark"><use href="#spark" /></svg>
+        <span>Claude Assist</span>
+      </a>
+      <nav class="nav__links" aria-label="Primary">
+        <a href="#features">Features</a>
+        <a href="#how">How it works</a>
+        <a href="#faq">FAQ</a>
+      </nav>
+      <div class="nav__actions">
+        <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle dark mode">
+          <svg class="icon-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2" fill="currentColor"/><g stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2.5v2M12 19.5v2M4.6 4.6l1.4 1.4M18 18l1.4 1.4M2.5 12h2M19.5 12h2M4.6 19.4L6 18M18 6l1.4-1.4"/></g></svg>
+          <svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M20.5 14.6A8.5 8.5 0 0 1 9.4 3.5a8.5 8.5 0 1 0 11.1 11.1z"/></svg>
+        </button>
+        <a class="btn btn--primary btn--sm js-download" href="#download">
+          <svg class="btn__icon"><use href="#apple" /></svg>Download
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main id="top">
+    <!-- ============ HERO ============ -->
+    <section class="hero">
+      <div class="hero__bg" aria-hidden="true"></div>
+      <div class="container hero__grid">
+        <div class="hero__copy">
+          <span class="pill reveal"><span class="pill__dot"></span> Free for macOS</span>
+          <h1 class="hero__title reveal">
+            Your Claude limits,<br />
+            <em>one glance</em> away.
+          </h1>
+          <p class="hero__sub reveal">
+            Claude Assist lives quietly in your menu bar and shows exactly how much
+            session and weekly usage you have left — with reset countdowns and a live
+            usage graph. No more guessing, no more surprise limits mid-flow.
+          </p>
+          <div class="hero__cta reveal">
+            <a class="btn btn--primary btn--lg js-download" href="#download">
+              <svg class="btn__icon"><use href="#apple" /></svg>
+              <span>Download for Mac</span>
+            </a>
+            <a class="btn btn--ghost btn--lg" href="#features">See features
+              <svg class="btn__arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </a>
+          </div>
+          <ul class="hero__meta reveal">
+            <li><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>100% free</li>
+            <li><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Native macOS</li>
+            <li><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Auto-refreshing</li>
+          </ul>
+        </div>
+
+        <!-- Live recreation of the app popover -->
+        <div class="hero__visual reveal">
+          <div class="menubar" aria-hidden="true">
+            <svg class="menubar__apple"><use href="#apple" /></svg>
+            <span class="menubar__spacer"></span>
+            <span class="menubar__item menubar__item--active"><span class="mb-pill js-mb-pill"></span></span>
+            <span class="menubar__item">
+              <svg viewBox="0 0 24 24" width="16" height="16"><path d="M2 9a15 15 0 0 1 20 0M5.5 12.5a10 10 0 0 1 13 0M9 16a5 5 0 0 1 6 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="19.5" r="1.4" fill="currentColor"/></svg>
+            </span>
+            <span class="menubar__item menubar__battery"><span></span></span>
+            <span class="menubar__item menubar__clock js-clock">Fri 7:20 PM</span>
+          </div>
+
+          <div class="popover" role="img" aria-label="Claude Assist popover showing session usage graph, 100% session remaining and 90% weekly remaining">
+            <div class="popover__head">
+              <svg class="popover__logo"><use href="#spark" /></svg>
+              <strong>Claude Assist</strong>
+              <span class="popover__tools">
+                <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 2.8l1.6 2.3 2.7-.7.6 2.7 2.6 1-1 2.6 1.8 2.1-2.1 1.8 1 2.6-2.6 1-.6 2.7-2.7-.7L12 21.2l-1.6-2.3-2.7.7-.6-2.7-2.6-1 1-2.6-1.8-2.1 2.1-1.8-1-2.6 2.6-1 .6-2.7 2.7.7z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
+                <svg viewBox="0 0 24 24"><path d="M19 12a7 7 0 1 1-2.05-4.95M19 4v4h-4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </span>
+            </div>
+
+            <div class="pcard">
+              <div class="pcard__title">
+                <svg class="pcard__chart-ico" viewBox="0 0 24 24"><path d="M3 3v18h18" fill="none" stroke="currentColor" stroke-width="2"/><path d="M6 15l4-4 3 2 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <span>Session usage</span>
+                <svg class="pcard__info"><use href="#info" /></svg>
+              </div>
+              <svg class="graph" viewBox="0 0 300 130" preserveAspectRatio="none">
+                <g class="graph__grid">
+                  <line x1="0" y1="10" x2="250" y2="10" /><line x1="0" y1="55" x2="250" y2="55" /><line x1="0" y1="100" x2="250" y2="100" />
+                  <line x1="20" y1="5" x2="20" y2="100" /><line x1="70" y1="5" x2="70" y2="100" /><line x1="120" y1="5" x2="120" y2="100" /><line x1="170" y1="5" x2="170" y2="100" /><line x1="220" y1="5" x2="220" y2="100" />
+                </g>
+                <path class="graph__area" d="M0 100 L20 100 L45 94 L70 86 L95 80 L120 66 L145 60 L170 48 L170 100 Z" />
+                <path class="graph__line" d="M0 100 L20 100 L45 94 L70 86 L95 80 L120 66 L145 60 L170 48" />
+                <circle class="graph__dot" cx="170" cy="48" r="4" />
+                <g class="graph__labels">
+                  <text x="292" y="14" text-anchor="end">100%</text>
+                  <text x="292" y="59" text-anchor="end">50%</text>
+                  <text x="292" y="104" text-anchor="end">0%</text>
+                  <text x="20" y="124" text-anchor="middle">7 PM</text>
+                  <text x="70" y="124" text-anchor="middle">8 PM</text>
+                  <text x="120" y="124" text-anchor="middle">9 PM</text>
+                  <text x="170" y="124" text-anchor="middle">10 PM</text>
+                  <text x="220" y="124" text-anchor="middle">11 PM</text>
+                </g>
+              </svg>
+            </div>
+
+            <div class="pcard">
+              <div class="pcard__title">
+                <svg class="pcard__check"><use href="#check" /></svg>
+                <span>Session</span>
+                <svg class="pcard__info"><use href="#info" /></svg>
+              </div>
+              <div class="pcard__row">
+                <div><span class="pcard__pct"><span class="js-count" data-to="100">0</span>%</span><span class="pcard__state">Good</span></div>
+                <div class="pcard__reset"><b class="js-reset" data-minutes="280">4h 40m</b><small>Until reset</small></div>
+              </div>
+              <div class="bar"><span style="--w:100%"></span></div>
+            </div>
+
+            <div class="pcard">
+              <div class="pcard__title">
+                <svg class="pcard__check"><use href="#check" /></svg>
+                <span>Weekly</span>
+                <svg class="pcard__info"><use href="#info" /></svg>
+              </div>
+              <div class="pcard__row">
+                <div><span class="pcard__pct"><span class="js-count" data-to="90">0</span>%</span><span class="pcard__state">Good</span></div>
+                <div class="pcard__reset"><b>1d 21h</b><small>Until reset</small></div>
+              </div>
+              <div class="bar"><span style="--w:90%"></span></div>
+            </div>
+
+            <div class="popover__foot">
+              <span>Refreshing in <span class="js-refresh">5</span>s</span>
+              <span class="popover__quit"><svg viewBox="0 0 24 24"><path d="M12 3v8M6.3 6.6a8 8 0 1 0 11.4 0" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ FEATURES ============ -->
+    <section class="section" id="features">
+      <div class="container">
+        <div class="section__head reveal">
+          <span class="eyebrow">Features</span>
+          <h2>Everything you need to pace your Claude day.</h2>
+          <p>Designed to stay out of your way until the moment you need it — then tell you everything in one glance.</p>
+        </div>
+
+        <div class="bento">
+          <article class="tile tile--wide reveal">
+            <div class="tile__text">
+              <h3>Live session graph</h3>
+              <p>Watch your usage unfold across the current session window. Spot heavy stretches and plan long tasks before you hit the wall.</p>
+            </div>
+            <svg class="tile__graph" viewBox="0 0 400 120" preserveAspectRatio="none" aria-hidden="true">
+              <defs>
+                <linearGradient id="tg" x1="0" x2="0" y1="0" y2="1">
+                  <stop offset="0" stop-color="var(--accent)" stop-opacity=".35" />
+                  <stop offset="1" stop-color="var(--accent)" stop-opacity="0" />
+                </linearGradient>
+              </defs>
+              <path d="M0 110 C40 108 60 96 90 92 S150 70 180 74 S240 50 270 44 S340 26 400 14 L400 120 L0 120 Z" fill="url(#tg)" />
+              <path class="draw" d="M0 110 C40 108 60 96 90 92 S150 70 180 74 S240 50 270 44 S340 26 400 14" fill="none" stroke="var(--accent)" stroke-width="3" stroke-linecap="round" />
+            </svg>
+          </article>
+
+          <article class="tile reveal">
+            <div class="tile__visual tile__visual--status" aria-hidden="true">
+              <span class="status-pill js-status-pill"></span>
+            </div>
+            <h3>Glanceable status</h3>
+            <p>A tiny color-coded indicator in your menu bar shows your headroom without even opening the app.</p>
+          </article>
+
+          <article class="tile reveal">
+            <div class="tile__visual" aria-hidden="true">
+              <div class="mini-bars">
+                <div><small>Session</small><div class="bar bar--light"><span style="--w:100%"></span></div></div>
+                <div><small>Weekly</small><div class="bar bar--light"><span style="--w:62%"></span></div></div>
+              </div>
+            </div>
+            <h3>Session &amp; weekly limits</h3>
+            <p>Both of your Claude usage windows, side by side, with clear percentages and status labels.</p>
+          </article>
+
+          <article class="tile reveal">
+            <div class="tile__visual" aria-hidden="true">
+              <span class="big-mono js-reset-demo">4h 40m</span>
+            </div>
+            <h3>Reset countdowns</h3>
+            <p>Know exactly when your limits refresh — down to the minute — so you can time your next deep-work session.</p>
+          </article>
+
+          <article class="tile reveal">
+            <div class="tile__visual" aria-hidden="true">
+              <svg class="spin-ico" viewBox="0 0 24 24"><path d="M19 12a7 7 0 1 1-2.05-4.95M19 4v4h-4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <h3>Always up to date</h3>
+            <p>Auto-refreshes in the background, or tap refresh for an instant update whenever you like.</p>
+          </article>
+
+          <article class="tile tile--wide tile--full tile--accent reveal">
+            <div class="tile__text">
+              <h3>Native, light, and quiet</h3>
+              <p>A true macOS menu bar app. No Dock icon, no windows to manage, no clutter — just a click away when you need it, and invisible when you don't.</p>
+            </div>
+            <div class="tile__chips" aria-hidden="true">
+              <span>Menu bar only</span><span>Dark UI</span><span>Low footprint</span><span>Free forever</span>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ HOW IT WORKS ============ -->
+    <section class="section section--alt" id="how">
+      <div class="container how">
+        <div class="how__copy">
+          <div class="section__head section__head--left reveal">
+            <span class="eyebrow">How it works</span>
+            <h2>Up and running in under a minute.</h2>
+          </div>
+          <ol class="steps">
+            <li class="reveal">
+              <span class="steps__num">1</span>
+              <div><h3>Download</h3><p>Grab the free app with the button below — no sign-up forms, no trials.</p></div>
+            </li>
+            <li class="reveal">
+              <span class="steps__num">2</span>
+              <div><h3>Drag to Applications</h3><p>Open the download and move Claude Assist into your Applications folder.</p></div>
+            </li>
+            <li class="reveal">
+              <span class="steps__num">3</span>
+              <div><h3>Click the menu bar icon</h3><p>Launch it once. From then on, your usage is always one click away at the top of your screen.</p></div>
+            </li>
+          </ol>
+        </div>
+        <figure class="how__shot reveal">
+          <img src="assets/app-ui.webp" alt="Claude Assist app window showing session usage graph, session and weekly limits" loading="lazy" width="642" height="994" />
+        </figure>
+      </div>
+    </section>
+
+    <!-- ============ FAQ ============ -->
+    <section class="section" id="faq">
+      <div class="container container--narrow">
+        <div class="section__head reveal">
+          <span class="eyebrow">FAQ</span>
+          <h2>Questions, answered.</h2>
+        </div>
+        <div class="faq">
+          <details class="reveal" open>
+            <summary>Is Claude Assist really free?</summary>
+            <p>Yes. Claude Assist is completely free to download and use — no subscriptions, no in-app purchases.</p>
+          </details>
+          <details class="reveal">
+            <summary>What does it show?</summary>
+            <p>Your current Claude session usage and weekly usage as percentages, a status label for each, countdowns until each limit resets, and a graph of your usage across the current session.</p>
+          </details>
+          <details class="reveal">
+            <summary>How often does it update?</summary>
+            <p>It refreshes automatically on a short interval — you can see the countdown at the bottom of the popover — and you can hit the refresh button at any time for an instant update.</p>
+          </details>
+          <details class="reveal">
+            <summary>Will it clutter my Mac?</summary>
+            <p>No. It runs only in the menu bar, with no Dock icon or windows. Quit it any time from the power button in the popover.</p>
+          </details>
+          <details class="reveal">
+            <summary>Which Macs are supported?</summary>
+            <p>Claude Assist is built for modern versions of macOS. Check the download page for the latest system requirements.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ CTA ============ -->
+    <section class="cta" id="download">
+      <div class="container">
+        <div class="cta__card reveal">
+          <svg class="cta__spark" aria-hidden="true"><use href="#spark" /></svg>
+          <h2>Stop guessing. Start glancing.</h2>
+          <p>Download Claude Assist for free and keep your Claude usage in view, all day.</p>
+          <a class="btn btn--light btn--lg js-download" href="#download">
+            <svg class="btn__icon"><use href="#apple" /></svg>
+            <span>Download for Mac — Free</span>
+          </a>
+          <small class="cta__note">macOS menu bar app · Free forever</small>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer__inner">
+      <a href="#top" class="brand brand--sm">
+        <svg class="brand__mark"><use href="#spark" /></svg>
+        <span>Claude Assist</span>
+      </a>
+      <p class="footer__legal">
+        © <span class="js-year">2026</span> Claude Assist. Claude is a trademark of Anthropic, PBC.
+        Claude Assist is an independent app and is not affiliated with or endorsed by Anthropic.
+      </p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
