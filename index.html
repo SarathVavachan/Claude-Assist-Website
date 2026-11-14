@@ -128,7 +128,7 @@
             <span class="menubar__item menubar__clock js-clock">Fri 7:20 PM</span>
           </div>
 
-          <div class="popover" role="img" aria-label="Claude Assist popover showing session usage graph, 100% session remaining and 90% weekly remaining">
+          <div class="popover" role="img" aria-label="Claude Assist popover showing a session usage graph at 60%, session at 60% and weekly at 90%">
             <div class="popover__head">
               <svg class="popover__logo"><use href="#spark" /></svg>
               <strong>Claude Assist</strong>
@@ -149,9 +149,9 @@
                   <line x1="0" y1="10" x2="250" y2="10" /><line x1="0" y1="55" x2="250" y2="55" /><line x1="0" y1="100" x2="250" y2="100" />
                   <line x1="20" y1="5" x2="20" y2="100" /><line x1="70" y1="5" x2="70" y2="100" /><line x1="120" y1="5" x2="120" y2="100" /><line x1="170" y1="5" x2="170" y2="100" /><line x1="220" y1="5" x2="220" y2="100" />
                 </g>
-                <path class="graph__area" d="M0 100 L20 100 L45 94 L70 86 L95 80 L120 66 L145 60 L170 48 L170 100 Z" />
-                <path class="graph__line" d="M0 100 L20 100 L45 94 L70 86 L95 80 L120 66 L145 60 L170 48" />
-                <circle class="graph__dot" cx="170" cy="48" r="4" />
+                <path class="graph__area" d="M0 100 L20 100 L45 94 L70 86 L95 80 L120 66 L145 60 L170 46 L170 100 Z" />
+                <path class="graph__line" d="M0 100 L20 100 L45 94 L70 86 L95 80 L120 66 L145 60 L170 46" />
+                <circle class="graph__dot" cx="170" cy="46" r="4" />
                 <g class="graph__labels">
                   <text x="292" y="14" text-anchor="end">100%</text>
                   <text x="292" y="59" text-anchor="end">50%</text>
@@ -172,10 +172,10 @@
                 <svg class="pcard__info"><use href="#info" /></svg>
               </div>
               <div class="pcard__row">
-                <div><span class="pcard__pct"><span class="js-count" data-to="100">0</span>%</span><span class="pcard__state">Good</span></div>
+                <div><span class="pcard__pct"><span class="js-count" data-to="60">0</span>%</span><span class="pcard__state">Good</span></div>
                 <div class="pcard__reset"><b class="js-reset" data-minutes="280">4h 40m</b><small>Until reset</small></div>
               </div>
-              <div class="bar"><span style="--w:100%"></span></div>
+              <div class="bar"><span style="--w:60%"></span></div>
             </div>
 
             <div class="pcard">
@@ -299,7 +299,8 @@
           </ol>
         </div>
         <figure class="how__shot reveal">
-          <img src="assets/app-ui.webp" alt="Claude Assist app window showing session usage graph, session and weekly limits" loading="lazy" width="642" height="994" />
+          <img class="shot--dark" src="assets/app-ui.webp" alt="Claude Assist app window showing session usage graph, session and weekly limits" loading="lazy" width="642" height="994" />
+          <img class="shot--light" src="assets/app-ui-light.webp" alt="Claude Assist app window showing session usage graph, session and weekly limits" loading="lazy" width="642" height="992" />
         </figure>
       </div>
     </section>
