@@ -78,6 +78,7 @@
       <nav class="nav__links" aria-label="Primary">
         <a href="#features">Features</a>
         <a href="#how">How it works</a>
+        <a href="#requirements">Requirements</a>
         <a href="#faq">FAQ</a>
       </nav>
       <div class="nav__actions">
@@ -117,6 +118,9 @@
               <svg class="btn__arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </a>
           </div>
+          <p class="hero__req reveal">
+            Requires macOS 13+ on Apple Silicon and <a href="#requirements">Claude Code</a>.
+          </p>
           <ul class="hero__meta reveal">
             <li><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>100% free</li>
             <li><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Native macOS</li>
@@ -314,8 +318,50 @@
       </div>
     </section>
 
+    <!-- ============ REQUIREMENTS ============ -->
+    <section class="section" id="requirements">
+      <div class="container">
+        <div class="section__head reveal">
+          <span class="eyebrow">Requirements</span>
+          <h2>What you'll need.</h2>
+          <p>Claude Assist reads your limits from Claude Code on your Mac, so make sure you have these before you download.</p>
+        </div>
+
+        <div class="reqs">
+          <article class="req reveal">
+            <span class="req__icon" aria-hidden="true">
+              <svg><use href="#apple" /></svg>
+            </span>
+            <h3>macOS 13 Ventura or later</h3>
+            <p>Built for current macOS and runs on every release from Ventura onward.</p>
+          </article>
+
+          <article class="req reveal">
+            <span class="req__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.8"/><rect x="9.5" y="9.5" width="5" height="5" rx="1" fill="currentColor"/><path d="M9 2.5v3M15 2.5v3M9 18.5v3M15 18.5v3M2.5 9h3M2.5 15h3M18.5 9h3M18.5 15h3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            </span>
+            <h3>Apple Silicon Mac</h3>
+            <p>Any Mac with an M-series chip (M1 or newer). Intel Macs aren't supported yet.</p>
+          </article>
+
+          <article class="req req--wide reveal">
+            <span class="req__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><rect x="2.5" y="4" width="19" height="16" rx="3" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M7 10l3 2.5L7 15M12.5 15H17" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </span>
+            <h3>Claude Code, installed and signed in</h3>
+            <p>Claude Assist gets your usage from the <a href="https://claude.com/claude-code" target="_blank" rel="noopener noreferrer">Claude Code</a> CLI's <code>/usage</code> command. It runs locally and doesn't use any tokens. If you don't have Claude Code yet, install it from Terminal:</p>
+            <div class="cmd">
+              <code class="js-cmd">curl -fsSL https://claude.ai/install.sh | bash</code>
+              <button class="cmd__copy js-copy" type="button" aria-label="Copy install command">Copy</button>
+            </div>
+            <p class="req__hint">Then run <code>claude</code> once and sign in with your Claude account.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
     <!-- ============ FAQ ============ -->
-    <section class="section" id="faq">
+    <section class="section section--alt" id="faq">
       <div class="container container--narrow">
         <div class="section__head reveal">
           <span class="eyebrow">FAQ</span>
@@ -340,7 +386,15 @@
           </details>
           <details class="reveal">
             <summary>Which Macs are supported?</summary>
-            <p>Claude Assist is built for modern versions of macOS. Check the download page for the latest system requirements.</p>
+            <p>Any Apple Silicon Mac (M1 or newer) running macOS 13 Ventura or later. Intel Macs aren't supported at the moment.</p>
+          </details>
+          <details class="reveal">
+            <summary>Do I need Claude Code?</summary>
+            <p>Yes. Claude Assist reads your session and weekly limits from the Claude Code CLI, so Claude Code has to be installed and signed in with your Claude account. Checking usage runs locally and doesn't use any tokens.</p>
+          </details>
+          <details class="reveal">
+            <summary>It says &ldquo;Claude CLI not found.&rdquo; What now?</summary>
+            <p>Claude Assist couldn't find the <code>claude</code> command. Install Claude Code (see <a href="#requirements">Requirements</a>), and make sure the <code>claude</code> binary is in one of these locations: <code>~/.local/bin</code>, <code>~/.claude/local</code>, <code>/opt/homebrew/bin</code> or <code>/usr/local/bin</code>. The standard installer puts it in <code>~/.local/bin</code>.</p>
           </details>
         </div>
       </div>
@@ -357,7 +411,7 @@
             <svg class="btn__icon"><use href="#apple" /></svg>
             <span>Download for Mac — Free</span>
           </a>
-          <small class="cta__note">macOS menu bar app · Free forever</small>
+          <small class="cta__note">Requires macOS 13+ · Apple Silicon · <a href="#requirements">Claude Code</a> · Free forever</small>
         </div>
       </div>
     </section>

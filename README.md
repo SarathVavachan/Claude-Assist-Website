@@ -27,6 +27,17 @@ Claude Assist lives in your Mac's menu bar. A small color-coded indicator shows 
 
 Claude Assist is **completely free**: no subscriptions and no in-app purchases.
 
+## Requirements
+
+- macOS 13 Ventura or later
+- An Apple Silicon Mac (M1 or newer). Intel Macs aren't supported.
+- [Claude Code](https://claude.com/claude-code) installed and signed in. Claude Assist reads your limits from the CLI's `/usage` command:
+
+  ```bash
+  curl -fsSL https://claude.ai/install.sh | bash
+  claude   # run once to sign in
+  ```
+
 ## Installation
 
 1. Download Claude Assist from the website.
@@ -40,6 +51,7 @@ This repository contains the landing page for Claude Assist: a single-page stati
 - Modern design using Claude's brand colors (terracotta `#D97757` / `#C15F3C` on warm cream and charcoal)
 - **Light and dark mode**: follows the system setting by default, with a toggle that remembers your choice
 - Live, animated recreation of the app panel in the hero section
+- Requirements section (macOS version, Apple Silicon, Claude Code) with a copyable install command
 - Fully responsive, with reduced-motion support for accessibility
 
 ### Project structure
