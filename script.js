@@ -113,6 +113,22 @@ const DOWNLOAD_URL = "downloads/ClaudeAssist.dmg";
     }, 2200);
   }
 
+  /* ---------- Copy install command ---------- */
+  document.querySelectorAll(".js-copy").forEach((btn) => {
+    btn.addEventListener("click", async () => {
+      const text = btn.parentElement.querySelector(".js-cmd").textContent.trim();
+      try {
+        await navigator.clipboard.writeText(text);
+        btn.textContent = "Copied";
+        btn.classList.add("is-copied");
+      } catch {
+        btn.textContent = "Press ⌘C";
+        getSelection().selectAllChildren(btn.parentElement.querySelector(".js-cmd"));
+      }
+      setTimeout(() => { btn.textContent = "Copy"; btn.classList.remove("is-copied"); }, 1800);
+    });
+  });
+
   /* ---------- Year ---------- */
   document.querySelectorAll(".js-year").forEach((el) => (el.textContent = new Date().getFullYear()));
 })();
